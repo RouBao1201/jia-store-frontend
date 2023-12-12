@@ -1,8 +1,12 @@
 // @ts-ignore
 /* eslint-disable */
 
+/** 当前登录用户信息 **/
 declare namespace API {
   type CurrentUser = {
+    userInfo?: UserInfo;
+    userAuth?: UserAuthority[];
+    userRole?: UserRole[];
     name?: string;
     avatar?: string;
     userid?: string;
@@ -23,7 +27,30 @@ declare namespace API {
     phone?: string;
   };
 
+  /** 用户信息 **/
+  type UserInfo = {
+    id: number;
+    username: string;
+    status: number;
+    superAdmin: boolean;
+  }
+  /** 用户角色 **/
+  type UserRole = {
+    id: number;
+    name: string;
+    status: number;
+  }
+  /** 用户权限 **/
+  type UserAuthority = {
+    id: number;
+    authKey: string;
+    name: string;
+    type: string;
+    status: number;
+  }
+
   type LoginResult = {
+    token?: string
     status?: string;
     type?: string;
     currentAuthority?: string;
@@ -66,6 +93,12 @@ declare namespace API {
     password?: string;
     autoLogin?: boolean;
     type?: string;
+  };
+
+  type RegisterParams = {
+    username: string;
+    password: string;
+    checkPassword: string;
   };
 
   type ErrorResponse = {

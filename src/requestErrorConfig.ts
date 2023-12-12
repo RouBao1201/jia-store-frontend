@@ -1,6 +1,7 @@
-﻿import type { RequestOptions } from '@@/plugin-request/request';
-import type { RequestConfig } from '@umijs/max';
-import { message, notification } from 'antd';
+﻿import type {RequestOptions} from '@@/plugin-request/request';
+import type {RequestConfig} from '@umijs/max';
+import {history} from '@umijs/max';
+import {message, notification} from 'antd';
 
 // 错误处理方案： 错误类型
 enum ErrorShowType {
@@ -10,6 +11,7 @@ enum ErrorShowType {
   NOTIFICATION = 3,
   REDIRECT = 9,
 }
+
 // 与后端约定的响应数据格式
 interface ResponseStructure {
   success: boolean;
@@ -17,6 +19,12 @@ interface ResponseStructure {
   errorCode?: number;
   errorMessage?: string;
   showType?: ErrorShowType;
+}
+
+interface RespResult {
+  code: number;
+  msg?: string;
+  data?: any;
 }
 
 /**
@@ -29,12 +37,12 @@ export const errorConfig: RequestConfig = {
   errorConfig: {
     // 错误抛出
     errorThrower: (res) => {
-      const { success, data, errorCode, errorMessage, showType } =
+      const {success, data, errorCode, errorMessage, showType} =
         res as unknown as ResponseStructure;
       if (!success) {
         const error: any = new Error(errorMessage);
         error.name = 'BizError';
-        error.info = { errorCode, errorMessage, showType, data };
+        error.info = {errorCode, errorMessage, showType, data};
         throw error; // 抛出自制的错误
       }
     },
@@ -45,7 +53,7 @@ export const errorConfig: RequestConfig = {
       if (error.name === 'BizError') {
         const errorInfo: ResponseStructure | undefined = error.info;
         if (errorInfo) {
-          const { errorMessage, errorCode } = errorInfo;
+          const {errorMessage, errorCode} = errorInfo;
           switch (errorInfo.showType) {
             case ErrorShowType.SILENT:
               // do nothing
@@ -88,9 +96,12 @@ export const errorConfig: RequestConfig = {
   // 请求拦截器
   requestInterceptors: [
     (config: RequestOptions) => {
-      // 拦截请求配置，进行个性化处理。
-      const url = config?.url?.concat('?token = 123');
-      return { ...config, url };
+      // 将token放入请求头中
+      const Authorization = localStorage.getItem("accessToken");
+      if (Authorization !== null) {
+        config.headers = {...config.headers, Authorization}
+      }
+      return {...config};
     },
   ],
 
@@ -98,10 +109,13 @@ export const errorConfig: RequestConfig = {
   responseInterceptors: [
     (response) => {
       // 拦截响应数据，进行个性化处理
-      const { data } = response as unknown as ResponseStructure;
-
-      if (data?.success === false) {
-        message.error('请求失败！');
+      const {code, msg} = response as unknown as RespResult;
+      if (code !== 200) {
+        message.error("[" + code + "] " + msg);
+      }
+      // 无权限异常则直接跳转回登录页面
+      if (code === 403) {
+        history.push("/user/login");
       }
       return response;
     },
