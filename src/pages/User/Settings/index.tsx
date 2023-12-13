@@ -1,11 +1,12 @@
 import React, {useRef, useState} from 'react';
 import ProForm, {ProFormInstance, ProFormText} from '@ant-design/pro-form';
-import {Col, message, Row} from 'antd';
+import {Col, message, Modal, Row} from 'antd';
 import {useIntl, useModel} from 'umi';
 import ProCard from '@ant-design/pro-card';
 import 'antd/es/modal/style';
 import 'antd/es/slider/style';
 import {revise} from "@/services/ant-design-pro/api";
+import {history} from "@@/core/history";
 
 const UserInfoSettingsForm: React.FC<API.UserInfo> = () => {
   const {initialState} = useModel('@@initialState');
@@ -41,6 +42,17 @@ const UserInfoSettingsForm: React.FC<API.UserInfo> = () => {
           ),
         }}
         onFinish={async (values) => {
+          Modal.confirm({
+            content: "确定要修改个人信息吗？",
+            onOk: (args) => {
+              console.log("Song-onOk");
+              return;
+            },
+            onCancel: (args) => {
+              console.log("Song-onCancel");
+              return;
+            }
+          });
           const type = "old_password";
           const resp = await revise({...values, type});
           if (resp.code === 200) {
@@ -49,6 +61,8 @@ const UserInfoSettingsForm: React.FC<API.UserInfo> = () => {
               defaultMessage: '修改成功！',
             });
             message.success(defaultReviseSuccessMessage);
+            const urlParams = new URL(window.location.href).searchParams;
+            history.push(urlParams.get('redirect') || '/');
           } else {
             const defaultRevisePwdFailureMessage = intl.formatMessage({
               id: 'pages.revise.failure',
@@ -58,9 +72,14 @@ const UserInfoSettingsForm: React.FC<API.UserInfo> = () => {
           }
         }}
       >
-        <ProForm.Item label="姓名">
-          <>{userInfo?.nickname}</>
-        </ProForm.Item>
+        <ProFormText
+          label="昵称"
+          name="nickname"
+          initialValue={userInfo?.nickname}
+          required
+          formItemProps={{rules: [{required: true}]}}
+          fieldProps={{maxLength: 30}}
+        />
         <ProFormText
           label="用户名"
           name="username"
@@ -73,16 +92,7 @@ const UserInfoSettingsForm: React.FC<API.UserInfo> = () => {
           label="原密码"
           name="password"
           formItemProps={{
-            rules: [
-              {
-                validator: (rule, value) => {
-                  if (!value) {
-                    return Promise.reject(new Error('请填写原密码'));
-                  }
-                  return Promise.resolve();
-                },
-              },
-            ],
+            rules: [{required: true}],
           }}
         />
         <ProFormText.Password

@@ -111,7 +111,7 @@ export const errorConfig: RequestConfig = {
       // 拦截响应数据，进行个性化处理
       const {code, msg} = response.data as unknown as RespResult;
       if (code !== 200) {
-        message.error("[" + code + "] " + msg);
+        message.error(msg);
       }
       // 权限异常则直接跳转回登录页面
       if (code === 401) {
