@@ -33,6 +33,8 @@ export async function getInitialState(): Promise<{
   };
   // 如果不是登录页面，执行
   const { location } = history;
+  console.log("Song-getInitialState");
+  console.log(location);
   if (location.pathname !== loginPath) {
     const currentUser = await fetchUserInfo();
     return {
@@ -63,6 +65,7 @@ export const layout: RunTimeLayoutConfig = ({ initialState, setInitialState }) =
     },
     footerRender: () => <Footer />,
     onPageChange: () => {
+      console.log("Song-RunTimeLayoutConfig");
       const { location } = history;
       // 如果没有登录，重定向到 login
       if (!initialState?.currentUser && location.pathname !== loginPath) {

@@ -109,12 +109,12 @@ export const errorConfig: RequestConfig = {
   responseInterceptors: [
     (response) => {
       // 拦截响应数据，进行个性化处理
-      const {code, msg} = response as unknown as RespResult;
+      const {code, msg} = response.data as unknown as RespResult;
       if (code !== 200) {
         message.error("[" + code + "] " + msg);
       }
-      // 无权限异常则直接跳转回登录页面
-      if (code === 403) {
+      // 权限异常则直接跳转回登录页面
+      if (code === 401) {
         history.push("/user/login");
       }
       return response;

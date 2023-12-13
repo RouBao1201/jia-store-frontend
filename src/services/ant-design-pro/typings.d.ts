@@ -52,6 +52,7 @@ declare namespace API {
   type LoginResult = {
     token?: string
     status?: string;
+    errorMsg?: string;
     type?: string;
     currentAuthority?: string;
   };
@@ -99,6 +100,22 @@ declare namespace API {
     username: string;
     password: string;
     checkPassword: string;
+  };
+
+  type RegisterResult = {
+    status?: string
+    errorMsg?: string
+  };
+
+  type ReviseParams = {
+    username: string;
+    password: string;
+    checkPassword: string;
+  };
+
+  type ReviseResult = {
+    status?: string
+    errorMsg?: string
   };
 
   type ErrorResponse = {

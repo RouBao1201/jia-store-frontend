@@ -1,7 +1,6 @@
 // @ts-ignore
 /* eslint-disable */
 import {request} from '@umijs/max';
-import RegisterParams = API.RegisterParams;
 
 /** 获取当前的用户 GET /api/user/currentUser */
 export async function currentUser(options?: { [key: string]: any }) {
@@ -14,8 +13,20 @@ export async function currentUser(options?: { [key: string]: any }) {
 }
 
 /** 用户注册接口 POST /api/user/register */
-export async function register(body: RegisterParams, options?: { [key: string]: any }) {
+export async function register(body: API.RegisterParams, options?: { [key: string]: any }) {
   return request<Record<string, any>>('/api/user/register', {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json',
+    },
+    data: body,
+    ...(options || {}),
+  });
+}
+
+/** 用户修改密码接口 POST /api/user/revise */
+export async function revise(body: API.ReviseParams, options?: { [key: string]: any }) {
+  return request<Record<string, any>>('/api/user/revise', {
     method: 'POST',
     headers: {
       'Content-Type': 'application/json',
