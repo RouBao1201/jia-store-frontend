@@ -71,7 +71,7 @@ const ReviseMessage: React.FC<{
 
 const ForgetPassword: React.FC = () => {
   const [userReviseState, setUserReviseState] = useState<API.ReviseResult>({});
-  const [type, setType] = useState<string>('account');
+  const [type, setType] = useState<string>('sms');
   const {styles} = useStyles();
   const intl = useIntl();
 
@@ -148,7 +148,7 @@ const ForgetPassword: React.FC = () => {
             centered
             items={[
               {
-                key: 'account',
+                key: 'sms',
                 label: intl.formatMessage({
                   id: 'pages.revise.passwordRevise.tab',
                   defaultMessage: '账户密码修改',
@@ -165,7 +165,7 @@ const ForgetPassword: React.FC = () => {
           {/*    })}*/}
           {/*  />*/}
           {/*)}*/}
-          {type === 'account' && (
+          {type === 'sms' && (
             <>
               <ProFormText
                 name="username"

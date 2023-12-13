@@ -42,7 +42,7 @@ export default [
     path: '/admin',
     name: 'admin',
     icon: 'crown',
-    access: 'canAdmin',
+    // access: 'canAdmin',
     routes: [
       {
         path: '/admin',
@@ -63,7 +63,12 @@ export default [
   },
   {
     path: '/',
-    redirect: '/welcome',
+    routes: [
+      { path: '/', redirect: '/welcome' },
+      { path: '/welcome', name: '欢迎', icon: 'smile', component: './Welcome' },
+      { path: '/user/settings', name: '个人信息', icon: 'info', component: './User/Settings' },
+      { component: './404' },
+    ]
   },
   {
     path: '*',

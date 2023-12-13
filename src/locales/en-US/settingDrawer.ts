@@ -24,8 +24,8 @@ export default {
   'app.setting.hideheader.hint': 'Works when Hidden Header is enabled',
   'app.setting.othersettings': 'Other Settings',
   'app.setting.weakmode': 'Color Blind Friendly Mode',
-  'app.setting.copy': 'Copy Setting',
+  'app.setting.copy': 'Copy Settings',
   'app.setting.copyinfo': 'copy success, please replace defaultSettings in src/models/setting.js',
   'app.setting.production.hint':
-    'Setting panel shows in development environment only, please manually modify',
+    'Settings panel shows in development environment only, please manually modify',
 };

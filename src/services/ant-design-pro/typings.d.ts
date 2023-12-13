@@ -33,6 +33,9 @@ declare namespace API {
     username: string;
     status: number;
     superAdmin: boolean;
+    nickname: string;
+    avatar: boolean;
+    gender: number;
   }
   /** 用户角色 **/
   type UserRole = {
@@ -111,6 +114,7 @@ declare namespace API {
     username: string;
     password: string;
     checkPassword: string;
+    type: string;
   };
 
   type ReviseResult = {
