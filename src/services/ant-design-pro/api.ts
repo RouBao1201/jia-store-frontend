@@ -24,9 +24,9 @@ export async function register(body: API.RegisterParams, options?: { [key: strin
   });
 }
 
-/** 用户修改密码（短信验证码）接口 POST /api/user/revise */
-export async function smsRevise(body: API.SmsReviseParams, options?: { [key: string]: any }) {
-  return request<Record<string, any>>('/api/user/smsRevise', {
+/** 用户修改密码接口 POST /api/user/revisePassword */
+export async function revisePassword(body: API.SmsReviseParams, options?: { [key: string]: any }) {
+  return request<Record<string, any>>('/api/user/revisePassword', {
     method: 'POST',
     headers: {
       'Content-Type': 'application/json',

@@ -1,5 +1,5 @@
 import {Footer} from '@/components';
-import {sendSmsCode, smsRevise} from '@/services/ant-design-pro/api';
+import {revisePassword, sendSmsCode} from '@/services/ant-design-pro/api';
 import {LockOutlined, MailTwoTone, UserOutlined,} from '@ant-design/icons';
 import {LoginForm, ProFormCaptcha, ProFormText,} from '@ant-design/pro-components';
 import {Helmet, history, SelectLang, useIntl} from '@umijs/max';
@@ -71,7 +71,7 @@ const ReviseMessage: React.FC<{
 
 const ForgetPassword: React.FC = () => {
   const [userReviseState, setUserReviseState] = useState<API.StatusResult>({});
-  const [type, setType] = useState<string>('sms');
+  const [type, setType] = useState<string>('old_password');
   const {styles} = useStyles();
   const intl = useIntl();
 
@@ -83,7 +83,7 @@ const ForgetPassword: React.FC = () => {
         return;
       }
       // 修改密码
-      const resp = await smsRevise({...values, type});
+      const resp = await revisePassword({...values, type});
       if (resp.code === 200) {
         message.success("修改成功");
         const urlParams = new URL(window.location.href).searchParams;
@@ -147,8 +147,12 @@ const ForgetPassword: React.FC = () => {
             centered
             items={[
               {
-                key: 'sms',
-                label: "密码修改（短信）",
+                key: 'old_password',
+                label: "旧密码",
+              },
+              {
+                key: 'sms_code',
+                label: "验证码",
               },
             ]}
           />
@@ -161,7 +165,74 @@ const ForgetPassword: React.FC = () => {
           {/*    })}*/}
           {/*  />*/}
           {/*)}*/}
-          {type === 'sms' && (
+          {/*旧密码方式修改密码tab*/}
+          {type === 'old_password' && (
+            <>
+              <ProFormText
+                name="username"
+                fieldProps={{
+                  size: 'large',
+                  prefix: <UserOutlined/>,
+                }}
+                placeholder={"请输入用户名"}
+                rules={[
+                  {
+                    required: true,
+                    message: "账号不可为空",
+                  },
+                ]}
+              />
+              <ProFormText.Password
+                name="oldPassword"
+                fieldProps={{
+                  size: 'large',
+                  prefix: <LockOutlined/>,
+                }}
+                placeholder={"请输入旧密码"}
+                rules={[
+                  {
+                    required: true,
+                    message: "旧密码不可为空",
+                  },
+                ]}
+              />
+              <ProFormText.Password
+                name="newPassword"
+                fieldProps={{
+                  size: 'large',
+                  prefix: <LockOutlined/>,
+                }}
+                placeholder={"请输入新密码"}
+                rules={[
+                  {
+                    required: true,
+                    message: "新密码不可为空",
+                  },
+                ]}
+              />
+              <ProFormText.Password
+                name="checkPassword"
+                fieldProps={{
+                  size: 'large',
+                  prefix: <LockOutlined/>,
+                }}
+                placeholder={"请再次输入新密码"}
+                rules={[
+                  {
+                    required: true,
+                    message: "请再次输入新密码",
+                  },
+                ]}
+              />
+              <a onClick={() => {
+                history.push("/user/login");
+              }}>
+                ➥ 回到登录
+              </a>
+            </>
+          )}
+          {/*短信方式修改密码tab*/}
+          {type === 'sms_code' && (
             <>
               <ProFormText
                 name="username"

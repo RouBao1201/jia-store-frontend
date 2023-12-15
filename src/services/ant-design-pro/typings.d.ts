@@ -113,9 +113,11 @@ declare namespace API {
 
   type SmsReviseParams = {
     username: string;
+    oldPassword?: string;
     newPassword: string;
     checkPassword: string;
-    smsCode: string;
+    smsCode?: string;
+    type: string;
   };
 
   type SmsCodeSendParams = {
