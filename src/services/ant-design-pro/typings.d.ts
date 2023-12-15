@@ -35,7 +35,7 @@ declare namespace API {
     superAdmin: boolean;
     nickname: string;
     avatar: boolean;
-    gender: number;
+    gender: string;
   }
   /** 用户角色 **/
   type UserRole = {
@@ -102,6 +102,7 @@ declare namespace API {
   type RegisterParams = {
     username: string;
     password: string;
+    phone: string;
     checkPassword: string;
   };
 
@@ -110,17 +111,28 @@ declare namespace API {
     errorMsg?: string
   };
 
-  type ReviseParams = {
+  type SmsReviseParams = {
     username: string;
-    password: string;
+    newPassword: string;
     checkPassword: string;
-    type: string;
+    smsCode: string;
   };
 
-  type ReviseResult = {
+  type SmsCodeSendParams = {
+    username: string;
+  };
+
+  type PersonalSettingsParams = {
+    checkPassword: string;
+    nickname: string;
+    gender: number;
+  };
+
+  type StatusResult = {
     status?: string
     errorMsg?: string
   };
+
 
   type ErrorResponse = {
     /** 业务约定的错误码 */

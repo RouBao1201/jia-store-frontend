@@ -35,6 +35,13 @@ interface RespResult {
 export const errorConfig: RequestConfig = {
   // 错误处理： umi@3 的错误处理方案。
   errorConfig: {
+    adaptor: (response) => {
+      return {
+        ...response,
+        success: response.code === 200,
+        errorMessage: response.msg
+      }
+    },
     // 错误抛出
     errorThrower: (res) => {
       const {success, data, errorCode, errorMessage, showType} =

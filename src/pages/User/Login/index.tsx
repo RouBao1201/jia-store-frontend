@@ -1,6 +1,6 @@
 import {Footer} from '@/components';
 import {login} from '@/services/ant-design-pro/api';
-import {LockOutlined, UserOutlined,} from '@ant-design/icons';
+import {LockOutlined, UserOutlined} from '@ant-design/icons';
 import {LoginForm, ProFormCheckbox, ProFormText,} from '@ant-design/pro-components';
 import {FormattedMessage, Helmet, history, SelectLang, useIntl, useModel} from '@umijs/max';
 import {Alert, Divider, message, Space, Tabs, Typography} from 'antd';
@@ -194,7 +194,7 @@ const Login: React.FC = () => {
                     message: (
                       <FormattedMessage
                         id="pages.login.username.required"
-                        defaultMessage="请输入用户名!"
+                        defaultMessage="用户名是必填项！"
                       />
                     ),
                   },
@@ -216,7 +216,7 @@ const Login: React.FC = () => {
                     message: (
                       <FormattedMessage
                         id="pages.login.password.required"
-                        defaultMessage="请输入密码！"
+                        defaultMessage="密码是必填项！"
                       />
                     ),
                   },

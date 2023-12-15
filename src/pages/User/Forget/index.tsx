@@ -1,8 +1,8 @@
 import {Footer} from '@/components';
-import {revise} from '@/services/ant-design-pro/api';
-import {LockOutlined, UserOutlined,} from '@ant-design/icons';
-import {LoginForm, ProFormText,} from '@ant-design/pro-components';
-import {FormattedMessage, Helmet, history, SelectLang, useIntl} from '@umijs/max';
+import {sendSmsCode, smsRevise} from '@/services/ant-design-pro/api';
+import {LockOutlined, MailTwoTone, UserOutlined,} from '@ant-design/icons';
+import {LoginForm, ProFormCaptcha, ProFormText,} from '@ant-design/pro-components';
+import {Helmet, history, SelectLang, useIntl} from '@umijs/max';
 import {Alert, message, Tabs} from 'antd';
 import Settings from '../../../../config/defaultSettings';
 import React, {useState} from 'react';
@@ -70,26 +70,22 @@ const ReviseMessage: React.FC<{
 };
 
 const ForgetPassword: React.FC = () => {
-  const [userReviseState, setUserReviseState] = useState<API.ReviseResult>({});
+  const [userReviseState, setUserReviseState] = useState<API.StatusResult>({});
   const [type, setType] = useState<string>('sms');
   const {styles} = useStyles();
   const intl = useIntl();
 
-  const handleSubmit = async (values: API.ReviseParams) => {
+  const handleSubmit = async (values: API.SmsReviseParams) => {
     try {
-      const {password, checkPassword} = values;
-      if (password !== checkPassword) {
+      const {newPassword, checkPassword} = values;
+      if (newPassword !== checkPassword) {
         setUserReviseState({status: "error", errorMsg: "两次输入的密码不一致"})
         return;
       }
       // 修改密码
-      const resp = await revise({...values, type});
+      const resp = await smsRevise({...values, type});
       if (resp.code === 200) {
-        const defaultForgetSuccessMessage = intl.formatMessage({
-          id: 'pages.revise.success',
-          defaultMessage: '修改成功！',
-        });
-        message.success(defaultForgetSuccessMessage);
+        message.success("修改成功");
         const urlParams = new URL(window.location.href).searchParams;
         history.push(urlParams.get('redirect') || '/');
         return;
@@ -98,16 +94,19 @@ const ForgetPassword: React.FC = () => {
         setUserReviseState({status: (resp.data ? resp.data.status : "error"), errorMsg: resp.msg});
       }
     } catch (error) {
-      const defaultForgetFailureMessage = intl.formatMessage({
-        id: 'pages.revise.failure',
-        defaultMessage: '修改失败，请重试！',
-      });
       console.log(error);
-      message.error(defaultForgetFailureMessage);
+      message.error("修改失败，请重试！");
     }
   };
   const {status, errorMsg} = userReviseState;
 
+  const waitTime = (time: number = 100) => {
+    return new Promise((resolve) => {
+      setTimeout(() => {
+        resolve(true);
+      }, time);
+    });
+  };
 
   return (
     <div className={styles.container}>
@@ -139,7 +138,7 @@ const ForgetPassword: React.FC = () => {
           subTitle={intl.formatMessage({id: 'pages.layouts.userLayout.title'})}
           actions={[]}
           onFinish={async (values) => {
-            await handleSubmit(values as API.ReviseParams);
+            await handleSubmit(values as API.SmsReviseParams);
           }}
         >
           <Tabs
@@ -149,10 +148,7 @@ const ForgetPassword: React.FC = () => {
             items={[
               {
                 key: 'sms',
-                label: intl.formatMessage({
-                  id: 'pages.revise.passwordRevise.tab',
-                  defaultMessage: '账户密码修改',
-                }),
+                label: "密码修改（短信）",
               },
             ]}
           />
@@ -173,41 +169,25 @@ const ForgetPassword: React.FC = () => {
                   size: 'large',
                   prefix: <UserOutlined/>,
                 }}
-                placeholder={intl.formatMessage({
-                  id: 'pages.revise.username.placeholder',
-                  defaultMessage: '请输入用户名',
-                })}
+                placeholder={"请输入用户名"}
                 rules={[
                   {
                     required: true,
-                    message: (
-                      <FormattedMessage
-                        id="pages.revise.username.required"
-                        defaultMessage="账号不可为空!"
-                      />
-                    ),
+                    message: "账号不可为空",
                   },
                 ]}
               />
               <ProFormText.Password
-                name="password"
+                name="newPassword"
                 fieldProps={{
                   size: 'large',
                   prefix: <LockOutlined/>,
                 }}
-                placeholder={intl.formatMessage({
-                  id: 'pages.revise.password.placeholder',
-                  defaultMessage: '请输入密码',
-                })}
+                placeholder={"请输入新密码"}
                 rules={[
                   {
                     required: true,
-                    message: (
-                      <FormattedMessage
-                        id="pages.revise.password.required"
-                        defaultMessage="密码不可为空!"
-                      />
-                    ),
+                    message: "新密码不可为空",
                   },
                 ]}
               />
@@ -217,26 +197,50 @@ const ForgetPassword: React.FC = () => {
                   size: 'large',
                   prefix: <LockOutlined/>,
                 }}
-                placeholder={intl.formatMessage({
-                  id: 'pages.revise.checkPassword.placeholder',
-                  defaultMessage: '请再次输入密码',
-                })}
+                placeholder={"请再次输入新密码"}
                 rules={[
                   {
                     required: true,
-                    message: (
-                      <FormattedMessage
-                        id="pages.revise.checkPassword.required"
-                        defaultMessage="请再次输入密码！"
-                      />
-                    ),
+                    message: "请再次输入新密码",
                   },
                 ]}
+              />
+              <ProFormCaptcha
+                fieldProps={{
+                  size: 'large',
+                  prefix: <MailTwoTone/>,
+                }}
+                captchaProps={{
+                  size: 'large',
+                }}
+                // 手机号的 name，onGetCaptcha 会注入这个值
+                phoneName="username"
+                name="smsCode"
+                rules={[
+                  {
+                    required: true,
+                    message: '请输入验证码',
+                  },
+                ]}
+                countDown={60}
+                placeholder="请输入验证码"
+                // 如果需要失败可以 throw 一个错误出来，onGetCaptcha 会自动停止
+                // throw new Error("获取验证码错误")
+                onGetCaptcha={async (username) => {
+                  await waitTime(1000);
+                  await sendSmsCode({username}).then((response) => {
+                    if (response.code === 200) {
+                      message.success(`账户 ${username} 验证码发送成功!`);
+                      return;
+                    }
+                    throw new Error("验证码发送失败");
+                  })
+                }}
               />
               <a onClick={() => {
                 history.push("/user/login");
               }}>
-                <FormattedMessage id="pages.login.callbackLogin" defaultMessage="➥ 回到登录"/>
+                ➥ 回到登录
               </a>
             </>
           )}

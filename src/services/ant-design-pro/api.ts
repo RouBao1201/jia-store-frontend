@@ -24,9 +24,33 @@ export async function register(body: API.RegisterParams, options?: { [key: strin
   });
 }
 
-/** 用户修改密码接口 POST /api/user/revise */
-export async function revise(body: API.ReviseParams, options?: { [key: string]: any }) {
-  return request<Record<string, any>>('/api/user/revise', {
+/** 用户修改密码（短信验证码）接口 POST /api/user/revise */
+export async function smsRevise(body: API.SmsReviseParams, options?: { [key: string]: any }) {
+  return request<Record<string, any>>('/api/user/smsRevise', {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json',
+    },
+    data: body,
+    ...(options || {}),
+  });
+}
+
+/** 发送短信验证码接口 POST /api/user/sendSmsCode */
+export async function sendSmsCode(body: API.SmsCodeSendParams, options?: { [key: string]: any }) {
+  return request<Record<string, any>>('/api/user/sendSmsCode', {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json',
+    },
+    data: body,
+    ...(options || {}),
+  });
+}
+
+/** 用户个人信息修改接口 POST /api/user/personalSettings */
+export async function personalSettings(body: API.PersonalSettingsParams, options?: { [key: string]: any }) {
+  return request<Record<string, any>>('/api/user/personalSettings', {
     method: 'POST',
     headers: {
       'Content-Type': 'application/json',

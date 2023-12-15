@@ -1,6 +1,6 @@
 import {Footer} from '@/components';
 import {register} from '@/services/ant-design-pro/api';
-import {LockOutlined, UserOutlined,} from '@ant-design/icons';
+import {LockOutlined, PhoneOutlined, UserOutlined} from '@ant-design/icons';
 import {LoginForm, ProFormText,} from '@ant-design/pro-components';
 import {FormattedMessage, Helmet, history, SelectLang, useIntl} from '@umijs/max';
 import {Alert, message, Tabs} from 'antd';
@@ -189,6 +189,20 @@ const Register: React.FC = () => {
                   },
                 ]}
               />
+              <ProFormText
+                name="phone"
+                fieldProps={{
+                  size: 'large',
+                  prefix: <PhoneOutlined/>,
+                }}
+                placeholder={"请输入电话号码"}
+                rules={[
+                  {
+                    required: true,
+                    message: "电话号码为必填项！",
+                  },
+                ]}
+              />
               <ProFormText.Password
                 name="password"
                 fieldProps={{
@@ -236,7 +250,7 @@ const Register: React.FC = () => {
               <a onClick={() => {
                 history.push("/user/login");
               }}>
-                <FormattedMessage id="pages.login.callbackLogin" defaultMessage="➥ 回到登录"/>
+                ➥ 回到登录
               </a>
             </>
           )}

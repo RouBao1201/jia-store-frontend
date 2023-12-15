@@ -1,28 +1,57 @@
-import React, {useRef, useState} from 'react';
+import React, {useEffect, useRef, useState} from 'react';
 import ProForm, {ProFormInstance, ProFormText} from '@ant-design/pro-form';
 import {Col, message, Modal, Row} from 'antd';
-import {useIntl, useModel} from 'umi';
+import {useModel} from 'umi';
 import ProCard from '@ant-design/pro-card';
 import 'antd/es/modal/style';
 import 'antd/es/slider/style';
-import {revise} from "@/services/ant-design-pro/api";
+import {personalSettings} from "@/services/ant-design-pro/api";
 import {history} from "@@/core/history";
+import {ProFormSelect} from "@ant-design/pro-components";
+import {getDictConfig} from "@/services/common/api";
 
 const UserInfoSettingsForm: React.FC<API.UserInfo> = () => {
-  const {initialState} = useModel('@@initialState');
+  const {initialState, setInitialState} = useModel('@@initialState');
   const [userInfo, setUserInfo] = useState<API.UserInfo>();
   const formRef = useRef<ProFormInstance>();
-  const intl = useIntl();
+  const [genderList, setGenderList] = useState<any>([]);
+
   if (!userInfo) {
-    setUserInfo(initialState?.currentUser?.userInfo)
+    setUserInfo(initialState?.currentUser?.userInfo);
+  }
+
+  useEffect(() => {
+    if (initialState?.currentUser?.userInfo) {
+      formRef.current?.setFieldsValue({
+        ...initialState?.currentUser?.userInfo,
+      });
+    } else {
+      formRef.current?.resetFields();
+    }
+  }, [userInfo]);
+
+  useEffect(() => {
+    getDictConfig("GENDER").then((response) => {
+      if (response.code === 200) {
+        const valueTmpList: any[] = [];
+        response.data.forEach((element: any) => {
+          valueTmpList.push({label: element.label, value: parseInt(element.value)});
+        });
+        setGenderList(valueTmpList);
+      }
+    })
+  }, []);
+
+  // 刷新用户信息
+  const refreshCurrentUserInfo = async () => {
+    const currentUser = await initialState?.fetchUserInfo?.();
+    setUserInfo(currentUser?.userInfo)
+    setInitialState({...initialState, currentUser});
   }
 
   return (
     <ProCard
-      title={intl.formatMessage({
-        id: 'app.settings.menu.user-info',
-        defaultMessage: '个人信息',
-      })}
+      title={"个人信息"}
     >
       <ProForm
         formRef={formRef}
@@ -43,54 +72,57 @@ const UserInfoSettingsForm: React.FC<API.UserInfo> = () => {
         }}
         onFinish={async (values) => {
           Modal.confirm({
-            content: "确定要修改个人信息吗？",
-            onOk: (args) => {
-              console.log("Song-onOk");
-              return;
+            title: "确定要修改个人信息吗？",
+            maskClosable: true,
+            onOk: () => {
+              return new Promise<void>((resolve, reject) => {
+                personalSettings({...values}).then((response) => {
+                  if (response.code === 200) {
+                    message.success("修改成功");
+                    refreshCurrentUserInfo();
+                    const urlParams = new URL(window.location.href).searchParams;
+                    history.push(urlParams.get('redirect') || '/');
+                    resolve();
+                  } else {
+                    message.error("删除失败");
+                    reject();
+                  }
+                })
+              })
             },
-            onCancel: (args) => {
-              console.log("Song-onCancel");
-              return;
+            onCancel: () => {
+              Promise.reject();
             }
           });
-          const type = "old_password";
-          const resp = await revise({...values, type});
-          if (resp.code === 200) {
-            const defaultReviseSuccessMessage = intl.formatMessage({
-              id: 'pages.revise.success',
-              defaultMessage: '修改成功！',
-            });
-            message.success(defaultReviseSuccessMessage);
-            const urlParams = new URL(window.location.href).searchParams;
-            history.push(urlParams.get('redirect') || '/');
-          } else {
-            const defaultRevisePwdFailureMessage = intl.formatMessage({
-              id: 'pages.revise.failure',
-              defaultMessage: '修改失败！',
-            });
-            message.error(defaultRevisePwdFailureMessage);
-          }
         }}
       >
         <ProFormText
-          label="昵称"
-          name="nickname"
-          initialValue={userInfo?.nickname}
+          readonly={true}
+          label="用户名"
+          name="username"
           required
           formItemProps={{rules: [{required: true}]}}
           fieldProps={{maxLength: 30}}
         />
         <ProFormText
-          label="用户名"
-          name="username"
-          initialValue={userInfo?.username}
+          label="昵称"
+          name="nickname"
           required
           formItemProps={{rules: [{required: true}]}}
           fieldProps={{maxLength: 30}}
         />
-        <ProFormText.Password
+        <ProFormSelect
+          label="性别"
+          name="gender"
+          required
+          initialValue={1}
+          formItemProps={{rules: [{required: true}]}}
+          options={genderList}
+          allowClear={false}
+        />
+        {/*<ProFormText.Password
           label="原密码"
-          name="password"
+          name="oldPassword"
           formItemProps={{
             rules: [{required: true}],
           }}
@@ -130,7 +162,7 @@ const UserInfoSettingsForm: React.FC<API.UserInfo> = () => {
               },
             ],
           }}
-        />
+        />*/}
       </ProForm>
     </ProCard>
   );
