@@ -1,12 +1,13 @@
 import {Footer} from '@/components';
-import {register} from '@/services/ant-design-pro/api';
-import {LockOutlined, PhoneOutlined, UserOutlined} from '@ant-design/icons';
-import {LoginForm, ProFormText,} from '@ant-design/pro-components';
+import {register, sendSmsCode} from '@/services/ant-design-pro/api';
+import {LockOutlined, MailOutlined, MailTwoTone, UserOutlined} from '@ant-design/icons';
+import {LoginForm, ProFormCaptcha, ProFormText,} from '@ant-design/pro-components';
 import {FormattedMessage, Helmet, history, SelectLang, useIntl} from '@umijs/max';
 import {Alert, message, Tabs} from 'antd';
 import Settings from '../../../../config/defaultSettings';
-import React, {useState} from 'react';
+import React, {useRef, useState} from 'react';
 import {createStyles} from 'antd-style';
+import {ProFormInstance} from "@ant-design/pro-form";
 
 const useStyles = createStyles(({token}) => {
   return {
@@ -74,6 +75,7 @@ const Register: React.FC = () => {
   const [type, setType] = useState<string>('account');
   const {styles} = useStyles();
   const intl = useIntl();
+  const formRef = useRef<ProFormInstance>();
 
   const handleSubmit = async (values: API.RegisterParams) => {
     try {
@@ -108,6 +110,13 @@ const Register: React.FC = () => {
   };
   const {status, errorMsg} = userRegisterState;
 
+  const waitTime = (time: number = 100) => {
+    return new Promise((resolve) => {
+      setTimeout(() => {
+        resolve(true);
+      }, time);
+    });
+  };
 
   return (
     <div className={styles.container}>
@@ -125,6 +134,7 @@ const Register: React.FC = () => {
         }}
       >
         <LoginForm
+          formRef={formRef}
           submitter={{
             searchConfig: {
               submitText: "注册"
@@ -190,18 +200,51 @@ const Register: React.FC = () => {
                 ]}
               />
               <ProFormText
-                name="phone"
+                name="email"
                 fieldProps={{
                   size: 'large',
-                  prefix: <PhoneOutlined/>,
+                  prefix: <MailOutlined/>,
                 }}
-                placeholder={"请输入电话号码"}
+                placeholder={"请输入邮箱"}
                 rules={[
                   {
                     required: true,
-                    message: "电话号码为必填项！",
+                    message: "邮箱为必填项！",
                   },
                 ]}
+              />
+              <ProFormCaptcha
+                fieldProps={{
+                  size: 'large',
+                  prefix: <MailTwoTone/>,
+                }}
+                captchaProps={{
+                  size: 'large',
+                }}
+                // 手机号的 name，onGetCaptcha 会注入这个值
+                phoneName="username"
+                name="smsCode"
+                rules={[
+                  {
+                    required: true,
+                    message: '请输入验证码',
+                  },
+                ]}
+                countDown={60}
+                placeholder="请输入验证码"
+                // 如果需要失败可以 throw 一个错误出来，onGetCaptcha 会自动停止
+                // throw new Error("获取验证码错误")
+                onGetCaptcha={async (username) => {
+                  const email = formRef.current?.getFieldValue("email");
+                  await waitTime(1000);
+                  await sendSmsCode({username, email}).then((response) => {
+                    if (response.code === 200) {
+                      message.success(`账户 ${username} 验证码发送成功!`);
+                      return;
+                    }
+                    throw new Error("验证码发送失败");
+                  })
+                }}
               />
               <ProFormText.Password
                 name="password"

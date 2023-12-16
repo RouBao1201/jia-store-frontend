@@ -101,8 +101,9 @@ declare namespace API {
 
   type RegisterParams = {
     username: string;
+    email: string;
+    smsCode: string;
     password: string;
-    phone: string;
     checkPassword: string;
   };
 
@@ -122,6 +123,7 @@ declare namespace API {
 
   type SmsCodeSendParams = {
     username: string;
+    email: string;
   };
 
   type PersonalSettingsParams = {

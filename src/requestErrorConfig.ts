@@ -122,6 +122,7 @@ export const errorConfig: RequestConfig = {
       }
       // 权限异常则直接跳转回登录页面
       if (code === 401) {
+        localStorage.removeItem("accessToken");
         history.push("/user/login");
       }
       return response;
