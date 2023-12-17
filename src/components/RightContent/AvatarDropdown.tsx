@@ -47,8 +47,8 @@ export const AvatarDropdown: React.FC<GlobalHeaderRightProps> = ({menu, children
     flushSync(() => {
       setInitialState((s) => ({...s, currentUser: undefined}));
     });
-    localStorage.removeItem("accessToken");
     await outLogin();
+    localStorage.removeItem("accessToken");
     const {search, pathname} = window.location;
     const urlParams = new URL(window.location.href).searchParams;
     /** 此方法会跳转到 redirect 参数所在的位置 */

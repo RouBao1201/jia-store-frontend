@@ -65,16 +65,23 @@ export default [
         path: '/system/dict-config',
         icon: 'setting',
         component: './System/DictConfig',
+        access: 'DICT_CONFIG',
+      },
+      {
+        name: '菜单权限',
+        path: '/system/menu-auth',
+        icon: 'setting',
+        component: './System/MenuAuth',
       },
     ],
   },
   {
     path: '/',
     routes: [
-      { path: '/', redirect: '/welcome' },
-      { path: '/welcome', name: '欢迎', icon: 'smile', component: './Welcome' },
-      { path: '/user/settings', name: '个人信息', icon: 'info', component: './User/Settings' },
-      { component: './404' },
+      {path: '/', redirect: '/welcome'},
+      {path: '/welcome', name: '欢迎', icon: 'smile', component: './Welcome'},
+      {path: '/user/settings', name: '个人信息', icon: 'info', component: './User/Settings'},
+      {component: './404'},
     ]
   },
   {
