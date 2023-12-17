@@ -56,10 +56,17 @@ export default [
     ],
   },
   {
-    name: 'list.table-list',
-    icon: 'table',
-    path: '/list',
-    component: './TableList',
+    name: '系统配置',
+    icon: 'setting',
+    path: '/system',
+    routes: [
+      {
+        name: '字典配置',
+        path: '/system/dict-config',
+        icon: 'setting',
+        component: './System/DictConfig',
+      },
+    ],
   },
   {
     path: '/',
@@ -75,4 +82,5 @@ export default [
     layout: false,
     component: './404',
   },
+
 ];

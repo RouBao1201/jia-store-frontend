@@ -1,5 +1,5 @@
 import {Footer} from '@/components';
-import {register, sendSmsCode} from '@/services/ant-design-pro/api';
+import {register, sendSmsCode} from '@/services/User/api';
 import {LockOutlined, MailOutlined, MailTwoTone, UserOutlined} from '@ant-design/icons';
 import {LoginForm, ProFormCaptcha, ProFormText,} from '@ant-design/pro-components';
 import {FormattedMessage, Helmet, history, SelectLang, useIntl} from '@umijs/max';
@@ -144,7 +144,7 @@ const Register: React.FC = () => {
             minWidth: 280,
             maxWidth: '75vw',
           }}
-          logo={<img alt="logo" src="/logo.svg"/>}
+          logo={<img alt="logo" src="/logo_bak.svg"/>}
           title="Ant Design"
           subTitle={intl.formatMessage({id: 'pages.layouts.userLayout.title'})}
           actions={[]}

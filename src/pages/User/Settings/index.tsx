@@ -5,7 +5,7 @@ import {useModel} from 'umi';
 import ProCard from '@ant-design/pro-card';
 import 'antd/es/modal/style';
 import 'antd/es/slider/style';
-import {personalSettings} from "@/services/ant-design-pro/api";
+import {personalSettings} from "@/services/User/api";
 import {history} from "@@/core/history";
 import {ProFormSelect} from "@ant-design/pro-components";
 import {getDictConfig} from "@/services/common/api";
