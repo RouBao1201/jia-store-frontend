@@ -114,8 +114,8 @@ export default () => {
         }
       />
       <DictConfigEditForm
+        editModalVisit={editingModalVisible}
         dictRecord={dictRecord}
-        visible={editingModalVisible}
         onSuccess={() => {
           actionRef.current?.reload();
           setEditingModalVisible(false);
