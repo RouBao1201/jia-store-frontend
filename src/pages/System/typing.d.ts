@@ -6,4 +6,14 @@ declare namespace API {
     label: string;
     value: string;
   }
+
+  type DictConfigCreateItem = {
+    dictKey: string;
+    dictPair: DictPaidItem[];
+  }
+
+  type DictPaidItem = {
+    label: string;
+    value: string;
+  }
 }

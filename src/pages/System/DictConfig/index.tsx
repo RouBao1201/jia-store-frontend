@@ -114,14 +114,12 @@ export default () => {
         }
       />
       <DictConfigEditForm
-        editModalVisit={editingModalVisible}
+        onOpenChange={setEditingModalVisible}
+        open={editingModalVisible}
         dictRecord={dictRecord}
         onSuccess={() => {
           actionRef.current?.reload();
           setEditingModalVisible(false);
-        }}
-        drawerProps={{
-          onClose: () => setEditingModalVisible(false),
         }}>
       </DictConfigEditForm>
     </>
