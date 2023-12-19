@@ -6,13 +6,13 @@ declare namespace API {
     label: string;
     value: string;
   }
-
-  type DictConfigCreateItem = {
+  /**字典配置新增**/
+  type DictConfigAddItem = {
     dictKey: string;
-    dictPair: DictPaidItem[];
+    dictPair: DictPairItem[];
   }
-
-  type DictPaidItem = {
+  /**字典键值对**/
+  type DictPairItem = {
     label: string;
     value: string;
   }

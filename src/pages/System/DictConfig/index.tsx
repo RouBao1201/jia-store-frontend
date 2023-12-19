@@ -4,13 +4,15 @@ import {ProTable} from '@ant-design/pro-components';
 import {Button, message, Modal, Space} from 'antd';
 import {useRef, useState} from 'react';
 import {deleteDictConfig, queryPageDictConfigList} from "@/pages/System/api";
+import DictConfigAddForm from "@/pages/System/DictConfig/DictConfigAddForm";
 import DictConfigEditForm from "@/pages/System/DictConfig/DictConfigEditForm";
 
 
 export default () => {
   const actionRef = useRef<ActionType>();
-  const [dictRecord, setDictRecord] = useState<API.DictConfigItem>();
-  const [editingModalVisible, setEditingModalVisible] = useState(false);
+  const [addModalVisible, setAddModalVisible] = useState(false);
+  const [editModalVisible, setEditModalVisible] = useState(false);
+  const [dictConfig, setDictConfig] = useState<API.DictConfigItem>();
 
   const columns: ProColumns<API.DictConfigItem>[] = [
     {
@@ -43,8 +45,8 @@ export default () => {
             size="small"
             icon={<EditOutlined/>}
             onClick={() => {
-              setDictRecord(record);
-              setEditingModalVisible(true);
+              setDictConfig(record);
+              setEditModalVisible(true);
             }}
           >
             编辑
@@ -103,8 +105,7 @@ export default () => {
             key="button"
             icon={<PlusOutlined/>}
             onClick={() => {
-              setDictRecord(undefined);
-              setEditingModalVisible(true);
+              setAddModalVisible(true);
             }}
             type="primary"
           >
@@ -113,13 +114,21 @@ export default () => {
         ]
         }
       />
-      <DictConfigEditForm
-        onOpenChange={setEditingModalVisible}
-        open={editingModalVisible}
-        dictRecord={dictRecord}
+      <DictConfigAddForm
+        onOpenChange={setAddModalVisible}
+        open={addModalVisible}
         onSuccess={() => {
           actionRef.current?.reload();
-          setEditingModalVisible(false);
+          setAddModalVisible(false);
+        }}>
+      </DictConfigAddForm>
+      <DictConfigEditForm
+        dictConfig={dictConfig}
+        onOpenChange={setEditModalVisible}
+        open={editModalVisible}
+        onSuccess={() => {
+          actionRef.current?.reload();
+          setEditModalVisible(false);
         }}>
       </DictConfigEditForm>
     </>

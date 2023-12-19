@@ -13,7 +13,7 @@ export async function queryPageDictConfigList(body: API.DictConfigItem, options?
 }
 
 /**新增字典配置**/
-export async function createDictConfig(body: API.DictConfigCreateItem, options?: { [key: string]: any }) {
+export async function createDictConfig(body: API.DictConfigAddItem, options?: { [key: string]: any }) {
   return request<Record<string, any>>('/api/dict/create', {
     method: 'POST',
     headers: {
