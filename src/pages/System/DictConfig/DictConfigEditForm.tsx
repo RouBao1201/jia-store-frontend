@@ -1,6 +1,6 @@
 import {ModalForm, ModalFormProps, ProFormInstance, ProFormList, ProFormText,} from '@ant-design/pro-form';
 import React, {useEffect, useRef} from 'react';
-import {CloseCircleOutlined, SmileOutlined} from "@ant-design/icons";
+import {CloseCircleOutlined} from "@ant-design/icons";
 import {ProForm} from '@ant-design/pro-components';
 
 export type DictConfigEditFormProps = {
@@ -25,6 +25,7 @@ const DictConfigEditForm: React.FC<DictConfigEditFormProps> = ({
 
   return (
     <ModalForm
+      modalProps={{destroyOnClose: true}}
       width={500}
       title="字典信息配置"
       onFinish={async (values) => {
@@ -57,12 +58,11 @@ const DictConfigEditForm: React.FC<DictConfigEditFormProps> = ({
       />
       <ProFormList
         name="dictPair"
-        label=""
         creatorButtonProps={{
           position: 'bottom',
           creatorButtonText: "新增键值对"
         }}
-        copyIconProps={{Icon: SmileOutlined, tooltipText: '复制此项到末尾'}}
+        copyIconProps={false}
         deleteIconProps={{
           Icon: CloseCircleOutlined,
           tooltipText: '不需要这行了',
