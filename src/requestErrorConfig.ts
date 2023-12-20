@@ -104,8 +104,9 @@ export const errorConfig: RequestConfig = {
   requestInterceptors: [
     (config: RequestOptions) => {
       // 将token放入请求头中
-      const Authorization = localStorage.getItem("accessToken");
+      let Authorization = localStorage.getItem("accessToken");
       if (Authorization !== null) {
+        Authorization = 'Bearer ' + Authorization;
         config.headers = {...config.headers, Authorization}
       }
       return {...config};
