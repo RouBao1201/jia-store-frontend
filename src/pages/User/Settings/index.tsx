@@ -8,7 +8,7 @@ import 'antd/es/slider/style';
 import {personalSettings} from "@/services/User/api";
 import {history} from "@@/core/history";
 import {ProFormSelect} from "@ant-design/pro-components";
-import {getDictConfig} from "@/services/common/api";
+import {listDictConfig} from "@/services/common/api";
 
 const UserInfoSettingsForm: React.FC<API.UserInfo> = () => {
   const {initialState, setInitialState} = useModel('@@initialState');
@@ -31,7 +31,7 @@ const UserInfoSettingsForm: React.FC<API.UserInfo> = () => {
   }, [userInfo]);
 
   useEffect(() => {
-    getDictConfig("GENDER").then((response) => {
+    listDictConfig("GENDER").then((response) => {
       if (response.code === 200) {
         const valueTmpList: any[] = [];
         response.data.forEach((element: any) => {

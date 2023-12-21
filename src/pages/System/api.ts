@@ -1,8 +1,8 @@
 import {request} from '@umijs/max';
 
 /**分页查询字典配置**/
-export async function queryPageDictConfigList(body: API.DictConfigItem, options?: { [key: string]: any }) {
-  return request<Record<string, any>>('/api/dict/pageList', {
+export async function listPageDictConfig(body: API.DictConfigItem, options?: { [key: string]: any }) {
+  return request<Record<string, any>>('/api/dict/listPage', {
     method: 'POST',
     headers: {
       'Content-Type': 'application/json',
@@ -13,8 +13,8 @@ export async function queryPageDictConfigList(body: API.DictConfigItem, options?
 }
 
 /**新增字典配置**/
-export async function createDictConfig(body: API.DictConfigAddItem, options?: { [key: string]: any }) {
-  return request<Record<string, any>>('/api/dict/create', {
+export async function saveDictConfig(body: API.DictConfigAddItem, options?: { [key: string]: any }) {
+  return request<Record<string, any>>('/api/dict/save', {
     method: 'POST',
     headers: {
       'Content-Type': 'application/json',
@@ -37,8 +37,8 @@ export async function updateDictConfig(body: API.DictConfigItem, options?: { [ke
 }
 
 /**删除字典配置**/
-export async function deleteDictConfig(id: number, options?: { [key: string]: any }) {
-  return request<Record<string, any>>('/api/dict/delete', {
+export async function removeDictConfig(id: number, options?: { [key: string]: any }) {
+  return request<Record<string, any>>('/api/dict/remove', {
     method: 'DELETE',
     headers: {
       'Content-Type': 'application/json',

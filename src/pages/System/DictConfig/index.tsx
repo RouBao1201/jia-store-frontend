@@ -3,7 +3,7 @@ import type {ActionType, ProColumns} from '@ant-design/pro-components';
 import {ProTable} from '@ant-design/pro-components';
 import {Button, message, Modal, Space} from 'antd';
 import {useRef, useState} from 'react';
-import {deleteDictConfig, queryPageDictConfigList} from "@/pages/System/api";
+import {listPageDictConfig, removeDictConfig} from "@/pages/System/api";
 import DictConfigAddForm from "@/pages/System/DictConfig/DictConfigAddForm";
 import DictConfigEditForm from "@/pages/System/DictConfig/DictConfigEditForm";
 
@@ -61,7 +61,7 @@ export default () => {
                 maskClosable: true,
                 onOk() {
                   return new Promise<void>((resolve, reject) => {
-                    deleteDictConfig(record.id).then((response) => {
+                    removeDictConfig(record.id).then((response) => {
                       if (response.code === 200) {
                         actionRef.current?.reload();
                         message.success('删除成功');
@@ -90,7 +90,7 @@ export default () => {
         columns={columns}
         actionRef={actionRef}
         request={async (params, sort, filter) => {
-          const resp = await queryPageDictConfigList(params);
+          const resp = await listPageDictConfig(params);
           return {
             success: resp.code === 200,
             data: resp.data.list,

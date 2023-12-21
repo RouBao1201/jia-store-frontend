@@ -3,7 +3,7 @@ import React, {useRef} from 'react';
 import {CloseCircleOutlined} from "@ant-design/icons";
 import {ProForm} from '@ant-design/pro-components';
 import {message} from "antd";
-import {createDictConfig} from "@/pages/System/api";
+import {saveDictConfig} from "@/pages/System/api";
 
 export type DictConfigAddFormProps = {
   onSuccess?: () => void;
@@ -20,7 +20,7 @@ const DictConfigAddForm: React.FC<DictConfigAddFormProps> = ({
       width={520}
       title="新增字典配置"
       onFinish={async (values) => {
-        const resp = await createDictConfig(values)
+        const resp = await saveDictConfig(values)
         if (resp.code === 200) {
           message.success('新增成功');
           if (onSuccess) {
