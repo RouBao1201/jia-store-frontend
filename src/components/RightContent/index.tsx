@@ -1,6 +1,5 @@
-import {QuestionCircleOutlined, VerifiedOutlined} from '@ant-design/icons';
-import {history, SelectLang as UmiSelectLang} from '@umijs/max';
-import React from 'react';
+import { InsuranceOutlined, QuestionCircleOutlined } from '@ant-design/icons';
+import { SelectLang as UmiSelectLang, history } from '@umijs/max';
 
 export type SiderTheme = 'light' | 'dark';
 
@@ -25,7 +24,7 @@ export const Question = () => {
         window.open('https://baidu.com');
       }}
     >
-      <QuestionCircleOutlined/>
+      <QuestionCircleOutlined />
     </div>
   );
 };
@@ -39,10 +38,10 @@ export const SuperAdmin = () => {
         height: 26,
       }}
       onClick={() => {
-        history.push("/super-admin");
+        history.push('/super-admin');
       }}
     >
-      <VerifiedOutlined/>
+      <InsuranceOutlined />
     </div>
   );
 };
