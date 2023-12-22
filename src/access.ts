@@ -9,7 +9,10 @@ export default function access(initialState: { currentUser?: API.CurrentUser } |
       accessMap[value.authKey] = true;
     }
   });
-  console.log(JSON.stringify(accessMap));
+  // 超级管理员页面授权
+  if (currentUser?.superAdmin) {
+    accessMap['SuperAdmin'] = true;
+  }
   return {
     ...accessMap
   };

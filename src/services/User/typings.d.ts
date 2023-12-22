@@ -4,6 +4,7 @@
 /** 当前登录用户信息 **/
 declare namespace API {
   type CurrentUser = {
+    superAdmin: boolean;
     userInfo?: UserInfo;
     userAuth?: UserAuthority[];
     userRole?: UserRole[];
@@ -14,7 +15,6 @@ declare namespace API {
     id: number;
     username: string;
     status: number;
-    superAdmin: boolean;
     nickname: string;
     avatar: boolean;
     gender: string;
@@ -106,7 +106,9 @@ declare namespace API {
   type PersonalSettingsParams = {
     checkPassword: string;
     nickname: string;
+    email: string;
     gender: number;
+    smsCode: string;
   };
 
   type StatusResult = {

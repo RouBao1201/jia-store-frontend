@@ -1,5 +1,5 @@
 import {outLogin} from '@/services/User/api';
-import {LogoutOutlined, SettingOutlined, UserOutlined} from '@ant-design/icons';
+import {LogoutOutlined, SettingOutlined} from '@ant-design/icons';
 import {history, useModel} from '@umijs/max';
 import {Spin} from 'antd';
 import {createStyles} from 'antd-style';

@@ -1,14 +1,15 @@
 import React, {useEffect, useRef, useState} from 'react';
 import ProForm, {ProFormInstance, ProFormText} from '@ant-design/pro-form';
-import {Col, message, Modal, Row} from 'antd';
+import {Col, message, Modal, Row, Space} from 'antd';
 import {useModel} from 'umi';
 import ProCard from '@ant-design/pro-card';
 import 'antd/es/modal/style';
 import 'antd/es/slider/style';
-import {personalSettings} from "@/services/User/api";
+import {personalSettings, sendSmsCode} from "@/services/User/api";
 import {history} from "@@/core/history";
-import {ProFormSelect} from "@ant-design/pro-components";
+import {ProFormCaptcha, ProFormSelect} from "@ant-design/pro-components";
 import {listDictConfig} from "@/services/common/api";
+import {MailTwoTone} from "@ant-design/icons";
 
 const UserInfoSettingsForm: React.FC<API.UserInfo> = () => {
   const {initialState, setInitialState} = useModel('@@initialState');
@@ -48,6 +49,14 @@ const UserInfoSettingsForm: React.FC<API.UserInfo> = () => {
     setUserInfo(currentUser?.userInfo)
     setInitialState({...initialState, currentUser});
   }
+
+  const waitTime = (time: number = 100) => {
+    return new Promise((resolve) => {
+      setTimeout(() => {
+        resolve(true);
+      }, time);
+    });
+  };
 
   return (
     <ProCard
@@ -98,6 +107,13 @@ const UserInfoSettingsForm: React.FC<API.UserInfo> = () => {
       >
         <ProFormText
           readonly={true}
+          label="ID"
+          name="id"
+          required
+          formItemProps={{rules: [{required: true}]}}
+          hidden={true}/>
+        <ProFormText
+          readonly={true}
           label="用户名"
           name="username"
           required
@@ -110,6 +126,48 @@ const UserInfoSettingsForm: React.FC<API.UserInfo> = () => {
           required
           formItemProps={{rules: [{required: true}]}}
           fieldProps={{maxLength: 30}}
+        />
+        <ProFormText
+          label="邮箱"
+          name="email"
+          required
+          formItemProps={{rules: [{required: true}]}}
+          fieldProps={{maxLength: 30}}
+        />
+        <ProFormCaptcha
+          label='验证码'
+          formItemProps={{rules: [{required: true}]}}
+          fieldProps={{
+            size: 'large',
+            prefix: <MailTwoTone/>,
+          }}
+          captchaProps={{
+            size: 'large',
+          }}
+          // 手机号的 name，onGetCaptcha 会注入这个值
+          phoneName="email"
+          name="smsCode"
+          rules={[
+            {
+              required: true,
+              message: '请输入验证码',
+            },
+          ]}
+          countDown={60}
+          placeholder="请输入验证码"
+          // 如果需要失败可以 throw 一个错误出来，onGetCaptcha 会自动停止
+          // throw new Error("获取验证码错误")
+          onGetCaptcha={async (email) => {
+            const username = formRef.current?.getFieldValue("username");
+            await waitTime(1000);
+            await sendSmsCode({email, username}).then((response) => {
+              if (response.code === 200) {
+                message.success(`邮箱 ${email} 验证码发送成功!`);
+                return;
+              }
+              throw new Error("验证码发送失败");
+            })
+          }}
         />
         <ProFormSelect
           label="性别"

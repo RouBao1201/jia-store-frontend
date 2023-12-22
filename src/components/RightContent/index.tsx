@@ -1,5 +1,5 @@
-import { QuestionCircleOutlined } from '@ant-design/icons';
-import { SelectLang as UmiSelectLang } from '@umijs/max';
+import {QuestionCircleOutlined, VerifiedOutlined} from '@ant-design/icons';
+import {history, SelectLang as UmiSelectLang} from '@umijs/max';
 import React from 'react';
 
 export type SiderTheme = 'light' | 'dark';
@@ -25,7 +25,24 @@ export const Question = () => {
         window.open('https://baidu.com');
       }}
     >
-      <QuestionCircleOutlined />
+      <QuestionCircleOutlined/>
+    </div>
+  );
+};
+
+// 超级管理员标签
+export const SuperAdmin = () => {
+  return (
+    <div
+      style={{
+        display: 'flex',
+        height: 26,
+      }}
+      onClick={() => {
+        history.push("/super-admin");
+      }}
+    >
+      <VerifiedOutlined/>
     </div>
   );
 };

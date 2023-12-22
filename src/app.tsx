@@ -1,13 +1,14 @@
 import {AvatarDropdown, AvatarName, Footer, Question, SelectLang} from '@/components';
-import {SettingDrawer, Settings as LayoutSettings} from '@ant-design/pro-components';
+import {ProBreadcrumb, SettingDrawer, Settings as LayoutSettings} from '@ant-design/pro-components';
 import type {RunTimeLayoutConfig} from '@umijs/max';
 import {history} from '@umijs/max';
 import defaultSettings from '../config/defaultSettings';
 import {errorConfig} from './requestErrorConfig';
 import {currentUser as queryCurrentUser} from '@/services/User/api';
-import React from 'react';
-import {Link} from "umi";
+import React, {useEffect, useState} from 'react';
 import logo from '../public/logo.svg'
+import {SuperAdmin} from "@/components/RightContent";
+import {Link} from "umi";
 
 const isDev = process.env.NODE_ENV === 'development';
 const loginPath = '/user/login';
@@ -46,19 +47,33 @@ export async function getInitialState(): Promise<{
     fetchUserInfo,
     settings: defaultSettings as Partial<LayoutSettings>,
   };
+
 }
 
 // ProLayout 支持的api https://procomponents.ant.design/components/layout
 export const layout: RunTimeLayoutConfig = ({initialState, setInitialState}) => {
+  const [actionsRenderList, setActionsRenderList] = useState<any>([]);
+  const {currentUser} = initialState || {};
+
+  useEffect(() => {
+    let tempList = [<Question key="doc"/>, <SelectLang key="SelectLang"/>];
+    if (currentUser && currentUser?.superAdmin) {
+      tempList.push(<SuperAdmin key="SuperAdmin"/>);
+    }
+    setActionsRenderList(tempList);
+  }, [currentUser]);
+
   return {
     // 修改公共图标（将defaultSettings中的logo配置注释掉,因为其不能使用本地图片）
     logo: logo,
-    actionsRender: () => [<Question key="doc"/>, <SelectLang key="SelectLang"/>],
+    actionsRender: () => (actionsRenderList),
     avatarProps: {
       src: initialState?.currentUser?.userInfo?.avatar,
       title: <AvatarName/>,
       render: (_, avatarChildren) => {
-        return <AvatarDropdown menu={true}>{avatarChildren}</AvatarDropdown>;
+        return (
+          <AvatarDropdown menu={true}>{avatarChildren}</AvatarDropdown>
+        );
       },
     },
     waterMarkProps: {
@@ -92,19 +107,11 @@ export const layout: RunTimeLayoutConfig = ({initialState, setInitialState}) => 
     //     width: '331px',
     //   },
     // ],
-    menuHeaderRender: undefined,
-    // 二级菜单图标
-    // menuItemRender: (menuItemProps, defaultDom) => {
-    //   if (menuItemProps.isUrl || !menuItemProps.path) {
-    //     return defaultDom;
-    //   }
-    //   return (
-    //     <Link to={menuItemProps.path}>
-    //       {menuItemProps.pro_layout_parentKeys && menuItemProps.pro_layout_parentKeys.length > 0 && menuItemProps?.icon}
-    //       {defaultDom}
-    //     </Link>
-    //   )
-    // },
+    headerContentRender: () => <ProBreadcrumb/>,
+    disableContentMargin: false,
+    menu: {
+      autoClose: false,
+    },
     // 自定义 403 页面
     // unAccessible: <div>unAccessible</div>,
     // 增加一个 loading 的状态

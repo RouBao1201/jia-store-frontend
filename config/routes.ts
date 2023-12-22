@@ -65,7 +65,7 @@ export default [
         path: '/system/dict-config',
         icon: 'setting',
         component: './System/DictConfig',
-        // access: 'DICT_CONFIG',
+        access: 'DICT_CONFIG',
       },
     ],
   },
@@ -75,6 +75,7 @@ export default [
       {path: '/', redirect: '/welcome'},
       {path: '/welcome', name: '欢迎', icon: 'smile', component: './Welcome'},
       {path: '/user/settings', name: '个人信息', icon: 'info', component: './User/Settings'},
+      {path: '/super-admin', name: '超级管理员', icon: 'verified', access: 'SuperAdmin', component: './SuperAdmin'},
       {component: './404'},
     ]
   },
@@ -83,5 +84,4 @@ export default [
     layout: false,
     component: './404',
   },
-
 ];
