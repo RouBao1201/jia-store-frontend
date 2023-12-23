@@ -10,3 +10,12 @@ export async function listDictConfig(dictKey: string) {
     data: {dictKey},
   });
 }
+
+/** 等待时间方法 **/
+export const waitTimeFunc = (time: number = 1000) => {
+  return new Promise((resolve) => {
+    setTimeout(() => {
+      resolve(true);
+    }, time);
+  });
+};

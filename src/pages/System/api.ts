@@ -47,3 +47,39 @@ export async function removeDictConfig(id: number, options?: { [key: string]: an
     ...(options || {}),
   });
 }
+
+/**分页查询字典配置**/
+export async function listPageRole(body: API.RoleItem, options?: { [key: string]: any }) {
+  return request<Record<string, any>>('/api/role/listPage', {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json',
+    },
+    data: body,
+    ...(options || {}),
+  });
+}
+
+/**删除角色配置**/
+export async function changeRoleStatus(body: API.RoleChangedStatusItem, options?: { [key: string]: any }) {
+  return request<Record<string, any>>('/api/role/changedStatus', {
+    method: 'PUT',
+    headers: {
+      'Content-Type': 'application/json',
+    },
+    data: body,
+    ...(options || {}),
+  });
+}
+
+/**新增角色**/
+export async function saveRole(body: API.RoleItem, options?: { [key: string]: any }) {
+  return request<Record<string, any>>('/api/role/save', {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json',
+    },
+    data: body,
+    ...(options || {}),
+  });
+}

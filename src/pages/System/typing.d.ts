@@ -16,4 +16,15 @@ declare namespace API {
     label: string;
     value: string;
   }
+  /**角色配置**/
+  type RoleItem = {
+    id: number;
+    name: string;
+    status: number;
+  }
+  /**角色配置**/
+  type RoleChangedStatusItem = {
+    id: number;
+    status: number;
+  }
 }

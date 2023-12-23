@@ -67,6 +67,13 @@ export default [
         component: './System/DictConfig',
         access: 'DICT_CONFIG',
       },
+      {
+        name: '角色配置',
+        path: '/system/role-config',
+        icon: 'setting',
+        component: './System/RoleConfig',
+        access: 'SuperAdmin',
+      },
     ],
   },
   {
