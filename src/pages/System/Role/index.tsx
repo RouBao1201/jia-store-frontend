@@ -4,7 +4,7 @@ import {ProTable} from '@ant-design/pro-components';
 import {Button, message, Space, Switch} from 'antd';
 import {useRef, useState} from 'react';
 import {changeRoleStatus, listPageRole} from "@/pages/System/api";
-import RoleConfigAddForm from "@/pages/System/RoleConfig/RoleConfigAddForm";
+import RoleConfigAddForm from "@/pages/System/Role/RoleConfigAddForm";
 import {waitTimeFunc} from "@/services/common/api";
 
 
@@ -27,6 +27,8 @@ export default () => {
       title: '状态',
       dataIndex: 'status',
       valueType: 'select',
+      filters: true,
+      onFilter: true,
       valueEnum: {
         1: {
           text: '启用'
@@ -91,7 +93,7 @@ export default () => {
   return (
     <>
       <ProTable<API.RoleItem>
-        headerTitle="字典配置"
+        headerTitle="角色管理"
         rowKey="id"
         columns={columns}
         actionRef={actionRef}

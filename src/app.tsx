@@ -1,5 +1,5 @@
 import {AvatarDropdown, AvatarName, Footer, Question, SelectLang} from '@/components';
-import {ProBreadcrumb, SettingDrawer, Settings as LayoutSettings} from '@ant-design/pro-components';
+import {ProBreadcrumb, Settings as LayoutSettings} from '@ant-design/pro-components';
 import type {RunTimeLayoutConfig} from '@umijs/max';
 import {history} from '@umijs/max';
 import defaultSettings from '../config/defaultSettings';
@@ -8,7 +8,8 @@ import {currentUser as queryCurrentUser} from '@/services/User/api';
 import React, {useEffect, useState} from 'react';
 import logo from '../public/logo.svg'
 import {SuperAdmin} from "@/components/RightContent";
-import {Link} from "umi";
+import {Avatar} from "antd";
+import {UserOutlined} from "@ant-design/icons";
 
 const isDev = process.env.NODE_ENV === 'development';
 const loginPath = '/user/login';
@@ -69,6 +70,10 @@ export const layout: RunTimeLayoutConfig = ({initialState, setInitialState}) => 
     actionsRender: () => (actionsRenderList),
     avatarProps: {
       src: initialState?.currentUser?.userInfo?.avatar,
+      icon: initialState?.currentUser?.userInfo?.avatar
+        ? ''
+        : initialState?.currentUser?.userInfo?.nickname.substring(0, 1).toUpperCase(),
+      style: {backgroundColor: '#fde3cf', color: '#f56a00'},
       title: <AvatarName/>,
       render: (_, avatarChildren) => {
         return (
@@ -76,17 +81,20 @@ export const layout: RunTimeLayoutConfig = ({initialState, setInitialState}) => 
         );
       },
     },
-    waterMarkProps: {
-      content: initialState?.currentUser?.userInfo?.nickname,
-    },
-    footerRender: () => <Footer/>,
-    onPageChange: () => {
-      const {location} = history;
-      // 如果没有登录，重定向到 login
-      if (!initialState?.currentUser && location.pathname !== loginPath) {
-        history.push(loginPath);
+    waterMarkProps:
+      {
+        content: initialState?.currentUser?.userInfo?.nickname,
       }
-    },
+    ,
+    footerRender: () => <Footer/>,
+    onPageChange:
+      () => {
+        const {location} = history;
+        // 如果没有登录，重定向到 login
+        if (!initialState?.currentUser && location.pathname !== loginPath) {
+          history.push(loginPath);
+        }
+      },
     // bgLayoutImgList: [
     //   {
     //     src: 'https://mdn.alipayobjects.com/yuyan_qk0oxh/afts/img/D2LWSqNny4sAAAAAAAAAAAAAFl94AQBr',
@@ -107,11 +115,15 @@ export const layout: RunTimeLayoutConfig = ({initialState, setInitialState}) => 
     //     width: '331px',
     //   },
     // ],
-    headerContentRender: () => <ProBreadcrumb/>,
-    disableContentMargin: false,
-    menu: {
-      autoClose: false,
-    },
+    headerContentRender:
+      () => <ProBreadcrumb/>,
+    disableContentMargin:
+      false,
+    menu:
+      {
+        autoClose: false,
+      }
+    ,
     // 自定义 403 页面
     // unAccessible: <div>unAccessible</div>,
     // 增加一个 loading 的状态
@@ -120,7 +132,7 @@ export const layout: RunTimeLayoutConfig = ({initialState, setInitialState}) => 
       return (
         <>
           {children}
-          {isDev && (
+          {/*{isDev && (
             <SettingDrawer
               disableUrlParams
               enableDarkTheme
@@ -132,12 +144,14 @@ export const layout: RunTimeLayoutConfig = ({initialState, setInitialState}) => 
                 }));
               }}
             />
-          )}
+          )}*/}
         </>
       );
     },
-    ...initialState?.settings,
-  };
+    ...
+      initialState?.settings,
+  }
+    ;
 };
 
 /**

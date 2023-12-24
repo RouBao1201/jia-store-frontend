@@ -27,4 +27,8 @@ declare namespace API {
     id: number;
     status: number;
   }
+  /**角色权限查询实体**/
+  type RolePermissionQueryItem = {
+    id: number;
+  }
 }

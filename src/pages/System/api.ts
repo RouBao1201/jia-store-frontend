@@ -83,3 +83,23 @@ export async function saveRole(body: API.RoleItem, options?: { [key: string]: an
     ...(options || {}),
   });
 }
+
+/**查询所有角色**/
+export async function listAllRole(options?: { [key: string]: any }) {
+  return request<Record<string, any>>('/api/role/listAllRole', {
+    method: 'GET',
+    ...(options || {}),
+  });
+}
+
+/**查询角色权限**/
+export async function listRolePermission(body: API.RolePermissionQueryItem, options?: { [key: string]: any }) {
+  return request<Record<string, any>>('/api/role/listRolePermission', {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json',
+    },
+    data: body,
+    ...(options || {}),
+  });
+}
