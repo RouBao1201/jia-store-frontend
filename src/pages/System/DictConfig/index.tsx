@@ -62,7 +62,7 @@ export default () => {
                 onOk() {
                   return new Promise<void>((resolve, reject) => {
                     removeDictConfig(record.id).then((response) => {
-                      if (response.code === 200) {
+                      if (response.code === "0000") {
                         actionRef.current?.reload();
                         message.success('删除成功');
                         resolve();
@@ -92,7 +92,7 @@ export default () => {
         request={async (params, sort, filter) => {
           const resp = await listPageDictConfig(params);
           return {
-            success: resp.code === 200,
+            success: resp.code === "0000",
             data: resp.data.list,
             total: resp.data.total,
           }

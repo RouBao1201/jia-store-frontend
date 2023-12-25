@@ -37,7 +37,7 @@ const RegisterPage = () => {
       }
       // 注册
       const resp = await register({...values, type});
-      if (resp.code === 200) {
+      if (resp.code === "0000") {
         const defaultRegisterSuccessMessage = intl.formatMessage({
           id: 'pages.register.success',
           defaultMessage: '注册成功！',
@@ -182,7 +182,7 @@ const RegisterPage = () => {
                 const email = formRef.current?.getFieldValue("email");
                 await waitTime(1000);
                 await sendSmsCode({username, email}).then((response) => {
-                  if (response.code === 200) {
+                  if (response.code === "0000") {
                     message.success(`账户 ${username} 验证码发送成功!`);
                     return;
                   }

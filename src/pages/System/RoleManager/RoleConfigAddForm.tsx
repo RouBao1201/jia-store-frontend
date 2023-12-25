@@ -18,7 +18,7 @@ const RoleConfigAddForm: React.FC<RoleConfigAddFormProps> = ({
 
   useEffect(() => {
     listDictConfig("STATUS").then((response) => {
-      if (response.code === 200) {
+      if (response.code === "0000") {
         const valueTmpList: any[] = [];
         response.data.forEach((element: any) => {
           valueTmpList.push({label: element.label, value: parseInt(element.value)});
@@ -35,7 +35,7 @@ const RoleConfigAddForm: React.FC<RoleConfigAddFormProps> = ({
       title="新增角色配置"
       onFinish={async (values) => {
         const resp = await saveRole(values)
-        if (resp.code === 200) {
+        if (resp.code === "0000") {
           message.success('新增成功');
           if (onSuccess) {
             onSuccess();

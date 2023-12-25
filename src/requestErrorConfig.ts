@@ -22,8 +22,8 @@ interface ResponseStructure {
 }
 
 interface RespResult {
-  code: number;
-  msg?: string;
+  code: string;
+  message?: string;
   data?: any;
 }
 
@@ -38,8 +38,8 @@ export const errorConfig: RequestConfig = {
     adaptor: (response) => {
       return {
         ...response,
-        success: response.code === 200,
-        errorMessage: response.msg
+        success: response.code === "0000",
+        errorMessage: response.message
       }
     },
     // 错误抛出
@@ -117,12 +117,12 @@ export const errorConfig: RequestConfig = {
   responseInterceptors: [
     (response) => {
       // 拦截响应数据，进行个性化处理
-      const {code, msg} = response.data as unknown as RespResult;
-      if (code !== 200) {
-        message.error(msg);
+      const {code} = response.data as unknown as RespResult;
+      if (code !== "0000") {
+        message.error(response.data?.message);
       }
       // 权限异常则直接跳转回登录页面
-      if (code === 401) {
+      if (code === "A0401" || code === "A0403") {
         localStorage.removeItem("accessToken");
         history.push("/user/login");
       }

@@ -31,4 +31,10 @@ declare namespace API {
   type RolePermissionQueryItem = {
     id: number;
   }
+
+  /**权限实体**/
+  type PermissionItem = {
+    id: number;
+    name: number;
+  }
 }

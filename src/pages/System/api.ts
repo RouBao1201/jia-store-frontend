@@ -103,3 +103,10 @@ export async function listRolePermissions(body: API.RolePermissionQueryItem, opt
     ...(options || {}),
   });
 }
+
+export async function listAllPermissions(options?: { [key: string]: any }) {
+  return request<Record<string, any>>('/api/permission/listAll', {
+    method: 'GET',
+    ...(options || {}),
+  });
+}

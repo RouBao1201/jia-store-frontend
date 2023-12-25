@@ -32,7 +32,7 @@ const DictConfigEditForm: React.FC<DictConfigEditFormProps> = ({
       title="修改字典配置"
       onFinish={async (values) => {
         const resp = await updateDictConfig(values);
-        if (resp.code === 200) {
+        if (resp.code === "0000") {
           message.success('修改成功');
           if (onSuccess) {
             onSuccess();

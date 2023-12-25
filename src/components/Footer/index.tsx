@@ -12,6 +12,7 @@ const Footer: React.FC = () => {
   return (
     <>
       <DefaultFooter
+        copyright="@2023 肉包体验技术中心出品"
         style={{
           background: 'none',
         }}

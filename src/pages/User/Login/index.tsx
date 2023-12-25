@@ -92,7 +92,7 @@ const LoginPage = () => {
     try {
       // 登录
       const resp = await login({...values, type});
-      if (resp.code === 200) {
+      if (resp.code === "0000") {
         // 将token放入本地缓存中
         localStorage.setItem("accessToken", resp.data.token);
         const defaultLoginSuccessMessage = intl.formatMessage({

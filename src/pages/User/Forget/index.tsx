@@ -20,7 +20,7 @@ const ForgetPasswordPage = () => {
       }
       // 修改密码
       const resp = await revisePassword({...values, type});
-      if (resp.code === 200) {
+      if (resp.code === "0000") {
         message.success("修改成功");
         const urlParams = new URL(window.location.href).searchParams;
         history.push(urlParams.get('redirect') || '/');
@@ -229,7 +229,7 @@ const ForgetPasswordPage = () => {
               onGetCaptcha={async (username) => {
                 await waitTime(1000);
                 await sendSmsCode({username}).then((response) => {
-                  if (response.code === 200) {
+                  if (response.code === "0000") {
                     message.success(`账户 ${username} 验证码发送成功!`);
                     return;
                   }

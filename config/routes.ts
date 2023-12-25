@@ -69,9 +69,9 @@ export default [
       },
       {
         name: '角色管理',
-        path: '/system/role',
+        path: '/system/role-manager',
         icon: 'setting',
-        component: './System/Role',
+        component: './System/RoleManager',
         access: 'ROLE_MANAGER',
       },
       {

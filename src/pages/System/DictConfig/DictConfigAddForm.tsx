@@ -21,7 +21,7 @@ const DictConfigAddForm: React.FC<DictConfigAddFormProps> = ({
       title="新增字典配置"
       onFinish={async (values) => {
         const resp = await saveDictConfig(values)
-        if (resp.code === 200) {
+        if (resp.code === "0000") {
           message.success('新增成功');
           if (onSuccess) {
             onSuccess();

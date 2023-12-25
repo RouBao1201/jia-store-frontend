@@ -4,7 +4,7 @@ import {ProTable} from '@ant-design/pro-components';
 import {Button, message, Space, Switch} from 'antd';
 import {useRef, useState} from 'react';
 import {changeRoleStatus, listPageRole} from "@/pages/System/api";
-import RoleConfigAddForm from "@/pages/System/Role/RoleConfigAddForm";
+import RoleConfigAddForm from "@/pages/System/RoleManager/RoleConfigAddForm";
 import {waitTimeFunc} from "@/services/common/api";
 
 
@@ -50,7 +50,7 @@ export default () => {
                         await waitTimeFunc(1000);
                         await changeRoleStatus({id: record.id, status: (checked ? 1 : 0)})
                           .then((response) => {
-                            if (response.code === 200) {
+                            if (response.code === "0000") {
                               message.success(checked ? "启用成功" : "停用成功");
                             } else {
                               message.error(checked ? "启用失败" : "停用失败");
@@ -100,7 +100,7 @@ export default () => {
         request={async (params, sort, filter) => {
           const resp = await listPageRole(params);
           return {
-            success: resp.code === 200,
+            success: resp.code === "0000",
             data: resp.data.list,
             total: resp.data.total,
           }

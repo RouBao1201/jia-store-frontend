@@ -33,7 +33,7 @@ const UserInfoSettingsForm: React.FC<API.UserInfo> = () => {
 
   useEffect(() => {
     listDictConfig("GENDER").then((response) => {
-      if (response.code === 200) {
+      if (response.code === "0000") {
         const valueTmpList: any[] = [];
         response.data.forEach((element: any) => {
           valueTmpList.push({label: element.label, value: parseInt(element.value)});
@@ -86,7 +86,7 @@ const UserInfoSettingsForm: React.FC<API.UserInfo> = () => {
             onOk: () => {
               return new Promise<void>((resolve, reject) => {
                 personalSettings({...values}).then((response) => {
-                  if (response.code === 200) {
+                  if (response.code === "0000") {
                     message.success("修改成功");
                     refreshCurrentUserInfo();
                     const urlParams = new URL(window.location.href).searchParams;
@@ -161,7 +161,7 @@ const UserInfoSettingsForm: React.FC<API.UserInfo> = () => {
             const username = formRef.current?.getFieldValue("username");
             await waitTime(1000);
             await sendSmsCode({email, username}).then((response) => {
-              if (response.code === 200) {
+              if (response.code === "0000") {
                 message.success(`邮箱 ${email} 验证码发送成功!`);
                 return;
               }

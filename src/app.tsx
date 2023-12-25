@@ -70,7 +70,7 @@ export const layout: RunTimeLayoutConfig = ({initialState, setInitialState}) => 
     actionsRender: () => (actionsRenderList),
     avatarProps: {
       src: initialState?.currentUser?.userInfo?.avatar,
-      icon: initialState?.currentUser?.userInfo?.avatar
+      icon: initialState?.currentUser?.userInfo && initialState?.currentUser?.userInfo?.avatar
         ? ''
         : initialState?.currentUser?.userInfo?.nickname.substring(0, 1).toUpperCase(),
       style: {backgroundColor: '#fde3cf', color: '#f56a00'},
