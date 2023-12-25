@@ -1,7 +1,6 @@
-import {Footer} from '@/components';
 import {login} from '@/services/User/api';
 import {LockOutlined, UserOutlined} from '@ant-design/icons';
-import {LoginForm, ProFormCheckbox, ProFormText,} from '@ant-design/pro-components';
+import {LoginFormPage, ProConfigProvider, ProFormCheckbox, ProFormText,} from '@ant-design/pro-components';
 import {FormattedMessage, Helmet, history, SelectLang, useIntl, useModel} from '@umijs/max';
 import {Alert, Divider, message, Space, Tabs, Typography} from 'antd';
 import Settings from '../../../../config/defaultSettings';
@@ -70,7 +69,7 @@ const LoginMessage: React.FC<{
   );
 };
 
-const Login: React.FC = () => {
+const LoginPage = () => {
   const [userLoginState, setUserLoginState] = useState<API.LoginResult>({});
   const [type, setType] = useState<string>('account');
   const {initialState, setInitialState} = useModel('@@initialState');
@@ -107,7 +106,7 @@ const Login: React.FC = () => {
         return;
       }
       // 如果失败去设置用户登录错误信息
-      setUserLoginState({status: (resp.data ? resp.data.status : "error"), errorMsg: resp.msg});
+      setUserLoginState({status: "error", errorMsg: resp.msg});
     } catch (error) {
       const defaultLoginFailureMessage = intl.formatMessage({
         id: 'pages.login.failure',
@@ -120,7 +119,10 @@ const Login: React.FC = () => {
   const {status, type: loginType, errorMsg} = userLoginState;
 
   return (
-    <div className={styles.container}>
+    <div style={{
+      backgroundColor: 'white',
+      height: '100vh',
+    }}>
       <Helmet>
         <title>
           {intl.formatMessage({
@@ -130,138 +132,134 @@ const Login: React.FC = () => {
           - {Settings.title}
         </title>
       </Helmet>
-      <Lang/>
-      <div
-        style={{
-          flex: '1',
-          padding: '32px 0',
+      {/*<Lang/>*/}
+      <LoginFormPage
+        backgroundImageUrl='/pic/login-background.jpg'
+        logo={<img alt="logo" src="/logo.svg"/>}
+        title="肉包仔"
+        subTitle={"致力于打造全球最大最香的肉包供应商"}
+        initialValues={{
+          autoLogin: true,
+        }}
+        actions={[]}
+        onFinish={async (values) => {
+          await handleSubmit(values as API.LoginParams);
         }}
       >
-        <LoginForm
-          contentStyle={{
-            minWidth: 280,
-            maxWidth: '75vw',
-          }}
-          logo={<img alt="logo" src="/logo.svg"/>}
-          title="肉包仔"
-          subTitle={"致力于打造全球最大最香的肉包供应商"}
-          initialValues={{
-            autoLogin: true,
-          }}
-          actions={[]}
-          onFinish={async (values) => {
-            await handleSubmit(values as API.LoginParams);
+        <Tabs
+          activeKey={type}
+          onChange={setType}
+          centered
+          items={[
+            {
+              key: 'account',
+              label: intl.formatMessage({
+                id: 'pages.login.accountLogin.tab',
+                defaultMessage: '账户密码登录',
+              }),
+            },
+          ]}
+        />
+
+        {status === 'error' && (
+          <LoginMessage
+            content={intl.formatMessage({
+              id: 'pages.login.accountLogin.errorMessage',
+              defaultMessage: errorMsg ? errorMsg : '账户或密码错误',
+            })}
+          />
+        )}
+        {type === 'account' && (
+          <>
+            <ProFormText
+              name="username"
+              fieldProps={{
+                size: 'large',
+                prefix: <UserOutlined/>,
+              }}
+              placeholder={intl.formatMessage({
+                id: 'pages.login.username.placeholder',
+                defaultMessage: '请输入用户名',
+              })}
+              rules={[
+                {
+                  required: true,
+                  message: (
+                    <FormattedMessage
+                      id="pages.login.username.required"
+                      defaultMessage="用户名是必填项！"
+                    />
+                  ),
+                },
+              ]}
+            />
+            <ProFormText.Password
+              name="password"
+              fieldProps={{
+                size: 'large',
+                prefix: <LockOutlined/>,
+              }}
+              placeholder={intl.formatMessage({
+                id: 'pages.login.password.placeholder',
+                defaultMessage: '请输入密码',
+              })}
+              rules={[
+                {
+                  required: true,
+                  message: (
+                    <FormattedMessage
+                      id="pages.login.password.required"
+                      defaultMessage="密码是必填项！"
+                    />
+                  ),
+                },
+              ]}
+            />
+          </>
+        )}
+        <div
+          style={{
+            marginBottom: 24,
           }}
         >
-          <Tabs
-            activeKey={type}
-            onChange={setType}
-            centered
-            items={[
-              {
-                key: 'account',
-                label: intl.formatMessage({
-                  id: 'pages.login.accountLogin.tab',
-                  defaultMessage: '账户密码登录',
-                }),
-              },
-            ]}
-          />
-
-          {status === 'error' && (
-            <LoginMessage
-              content={intl.formatMessage({
-                id: 'pages.login.accountLogin.errorMessage',
-                defaultMessage: errorMsg ? errorMsg : '账户或密码错误',
-              })}
-            />
-          )}
-          {type === 'account' && (
-            <>
-              <ProFormText
-                name="username"
-                fieldProps={{
-                  size: 'large',
-                  prefix: <UserOutlined/>,
+          <Space size={20} split={<Divider type="vertical"/>}>
+            <Typography.Link>
+              <ProFormCheckbox noStyle name="autoLogin">
+                <FormattedMessage id="pages.login.rememberMe" defaultMessage="自动登录"/>
+              </ProFormCheckbox>
+            </Typography.Link>
+            <Typography.Link>
+              <a onClick={() => {
+                history.push("/user/register");
+              }}>
+                <FormattedMessage id="pages.login.registerAccount" defaultMessage="注册账户"/>
+              </a>
+            </Typography.Link>
+            <Typography.Link>
+              <a
+                onClick={() => {
+                  history.push("/user/forget");
                 }}
-                placeholder={intl.formatMessage({
-                  id: 'pages.login.username.placeholder',
-                  defaultMessage: '请输入用户名',
-                })}
-                rules={[
-                  {
-                    required: true,
-                    message: (
-                      <FormattedMessage
-                        id="pages.login.username.required"
-                        defaultMessage="用户名是必填项！"
-                      />
-                    ),
-                  },
-                ]}
-              />
-              <ProFormText.Password
-                name="password"
-                fieldProps={{
-                  size: 'large',
-                  prefix: <LockOutlined/>,
+                style={{
+                  float: 'right',
                 }}
-                placeholder={intl.formatMessage({
-                  id: 'pages.login.password.placeholder',
-                  defaultMessage: '请输入密码',
-                })}
-                rules={[
-                  {
-                    required: true,
-                    message: (
-                      <FormattedMessage
-                        id="pages.login.password.required"
-                        defaultMessage="密码是必填项！"
-                      />
-                    ),
-                  },
-                ]}
-              />
-            </>
-          )}
-          <div
-            style={{
-              marginBottom: 24,
-            }}
-          >
-            <Space size={20} split={<Divider type="vertical"/>}>
-              <Typography.Link>
-                <ProFormCheckbox noStyle name="autoLogin">
-                  <FormattedMessage id="pages.login.rememberMe" defaultMessage="自动登录"/>
-                </ProFormCheckbox>
-              </Typography.Link>
-              <Typography.Link>
-                <a onClick={() => {
-                  history.push("/user/register");
-                }}>
-                  <FormattedMessage id="pages.login.registerAccount" defaultMessage="注册账户"/>
-                </a>
-              </Typography.Link>
-              <Typography.Link>
-                <a
-                  onClick={() => {
-                    history.push("/user/forget");
-                  }}
-                  style={{
-                    float: 'right',
-                  }}
-                >
-                  {/*<FormattedMessage id="pages.login.forgotPassword" defaultMessage="忘记密码"/>*/}
-                  修改密码？
-                </a>
-              </Typography.Link>
-            </Space>
-          </div>
-        </LoginForm>
-      </div>
-      <Footer/>
+              >
+                {/*<FormattedMessage id="pages.login.forgotPassword" defaultMessage="忘记密码"/>*/}
+                修改密码？
+              </a>
+            </Typography.Link>
+          </Space>
+        </div>
+      </LoginFormPage>
+      {/*<Footer/>*/}
     </div>
   );
 };
 
-export default Login;
+export default () => {
+  return (
+    <ProConfigProvider>
+      <LoginPage/>
+    </ProConfigProvider>
+  )
+};

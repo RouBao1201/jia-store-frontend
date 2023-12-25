@@ -93,8 +93,8 @@ export async function listAllRole(options?: { [key: string]: any }) {
 }
 
 /**查询角色权限**/
-export async function listRolePermission(body: API.RolePermissionQueryItem, options?: { [key: string]: any }) {
-  return request<Record<string, any>>('/api/role/listRolePermission', {
+export async function listRolePermissions(body: API.RolePermissionQueryItem, options?: { [key: string]: any }) {
+  return request<Record<string, any>>('/api/role/listRolePermissions', {
     method: 'POST',
     headers: {
       'Content-Type': 'application/json',

@@ -5,7 +5,7 @@ import type {DataNode} from 'antd/es/tree';
 import {ProFormInstance, QueryFilter} from "@ant-design/pro-form";
 import {ProFormSelect} from "@ant-design/pro-components";
 import ProCard from "@ant-design/pro-card";
-import {listAllRole, listRolePermission} from "@/pages/System/api";
+import {listAllRole, listRolePermissions} from "@/pages/System/api";
 
 interface TreeTransferProps {
   dataSource: DataNode[];
@@ -122,7 +122,7 @@ const RolePermissionForm: React.FC<unknown> = () => {
                  layout="horizontal"
                  formRef={formRef}
                  onFinish={async (values: API.RolePermissionQueryItem) => {
-                   await listRolePermission(values).then((response) => {
+                   await listRolePermissions(values).then((response) => {
                      if (response.code === 200) {
                        console.log("角色权限：[" + values.id + "]" + JSON.stringify(response.data));
                      }
