@@ -51,13 +51,11 @@ const PermissionTransferForm: React.FC<TreeTransferProps> = ({permissions, roleP
     <Transfer
       className={"role-permissions-transfer"}
       {...restProps}
-      listStyle={{
-        // width: 650,
-        // height: 490,
+      style={{
       }}
       dataSource={permissions}
       titles={['所有权限', '角色拥有权限']}
-      operations={['授予权限', '去除权限']}
+      operations={['授予权限', '移除权限']}
       targetKeys={targetKeys}
       selectedKeys={selectedKeys}
       showSelectAll={false}

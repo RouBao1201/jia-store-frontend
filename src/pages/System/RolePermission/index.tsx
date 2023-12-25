@@ -37,8 +37,8 @@ const App: React.FC = () => {
     <>
       <Space direction="vertical" size="middle" style={{display: 'flex'}}>
         <ProCard size={'small'}>
-          <QueryFilter defaultCollapsed split
-                       layout="horizontal"
+          <QueryFilter layout="horizontal"
+                       defaultCollapsed={true}
                        formRef={formRef}
                        onFinish={async (values: API.RolePermissionQueryItem) => {
                          await listRolePermissions(values).then((response) => {
@@ -55,15 +55,12 @@ const App: React.FC = () => {
               label='角色名称'
               width="md"
               name="id"
-              placeholder="请输入名称"
-              labelCol={{span: 6}}
-              wrapperCol={{span: 18}}
-              formItemProps={{rules: [{required: true}]}}
+              placeholder="请选择角色"
               options={roleList}
             />
           </QueryFilter>
         </ProCard>
-        <ProCard size={'default'} title='角色授权' layout={'center'}>
+        <ProCard size={'default'} title='角色授权'>
           <PermissionTransferForm permissions={permissions} rolePermissions={rolePermissions}/>
         </ProCard>
       </Space>

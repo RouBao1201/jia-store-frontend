@@ -1,5 +1,5 @@
 import {AvatarDropdown, AvatarName, Footer, Question, SelectLang} from '@/components';
-import {ProBreadcrumb, Settings as LayoutSettings} from '@ant-design/pro-components';
+import {ProBreadcrumb, SettingDrawer, Settings as LayoutSettings} from '@ant-design/pro-components';
 import type {RunTimeLayoutConfig} from '@umijs/max';
 import {history} from '@umijs/max';
 import defaultSettings from '../config/defaultSettings';
@@ -132,7 +132,7 @@ export const layout: RunTimeLayoutConfig = ({initialState, setInitialState}) => 
       return (
         <>
           {children}
-          {/*{isDev && (
+          {isDev && (
             <SettingDrawer
               disableUrlParams
               enableDarkTheme
@@ -144,7 +144,7 @@ export const layout: RunTimeLayoutConfig = ({initialState, setInitialState}) => 
                 }));
               }}
             />
-          )}*/}
+          )}
         </>
       );
     },
