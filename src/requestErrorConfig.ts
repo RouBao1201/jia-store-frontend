@@ -34,6 +34,7 @@ interface RespResult {
  */
 export const errorConfig: RequestConfig = {
   // 错误处理： umi@3 的错误处理方案。
+  timeout: 10000,
   errorConfig: {
     adaptor: (response) => {
       return {
@@ -43,7 +44,7 @@ export const errorConfig: RequestConfig = {
       }
     },
     // 错误抛出
-    errorThrower: (res) => {
+    /*errorThrower: (res) => {
       const {success, data, errorCode, errorMessage, showType} =
         res as unknown as ResponseStructure;
       if (!success) {
@@ -52,7 +53,7 @@ export const errorConfig: RequestConfig = {
         error.info = {errorCode, errorMessage, showType, data};
         throw error; // 抛出自制的错误
       }
-    },
+    },*/
     // 错误接收及处理
     errorHandler: (error: any, opts: any) => {
       if (opts?.skipErrorHandler) throw error;
