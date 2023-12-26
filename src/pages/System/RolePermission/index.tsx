@@ -8,6 +8,7 @@ import PermissionTransferForm from "@/pages/System/RolePermission/PermissionTran
 
 const App: React.FC = () => {
   const formRef = useRef<ProFormInstance>();
+  const [roleId, setRoleId] = useState<number>(-1);
   const [roleList, setRoleList] = useState<any>([]);
   const [permissions, setPermissions] = useState<any>();
   const [rolePermissions, setRolePermissions] = useState<any>([]);
@@ -40,7 +41,8 @@ const App: React.FC = () => {
           <QueryFilter layout="horizontal"
                        defaultCollapsed={true}
                        formRef={formRef}
-                       onFinish={async (values: API.RolePermissionQueryItem) => {
+                       onFinish={async (values) => {
+                         setRoleId(values.id);
                          await listRolePermissions(values).then((response) => {
                            if (response.code === "0000") {
                              const valuesTemp = [];
@@ -61,7 +63,7 @@ const App: React.FC = () => {
           </QueryFilter>
         </ProCard>
         <ProCard size={'default'} title='角色授权'>
-          <PermissionTransferForm permissions={permissions} rolePermissions={rolePermissions}/>
+          <PermissionTransferForm roleId={roleId} permissions={permissions} rolePermissions={rolePermissions}/>
         </ProCard>
       </Space>
     </>

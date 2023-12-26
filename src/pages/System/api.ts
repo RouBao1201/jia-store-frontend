@@ -104,9 +104,22 @@ export async function listRolePermissions(body: API.RolePermissionQueryItem, opt
   });
 }
 
+/**查询所有权限**/
 export async function listAllPermissions(options?: { [key: string]: any }) {
   return request<Record<string, any>>('/api/permission/listAll', {
     method: 'GET',
+    ...(options || {}),
+  });
+}
+
+/**角色权限修改**/
+export async function changeRolePermissions(body: API.RolePermissionsChangedItem, options?: { [key: string]: any }) {
+  return request<Record<string, any>>('/api/role/changeRolePermissions', {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json',
+    },
+    data: body,
     ...(options || {}),
   });
 }

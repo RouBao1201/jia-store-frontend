@@ -32,9 +32,10 @@ declare namespace API {
     id: number;
   }
 
-  /**权限实体**/
-  type PermissionItem = {
-    id: number;
-    name: number;
+  /**角色权限修改请求实体**/
+  type RolePermissionsChangedItem = {
+    role: number;
+    permissionIds: string[];
+    type: string
   }
 }
